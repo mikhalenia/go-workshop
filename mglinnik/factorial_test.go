@@ -2,7 +2,7 @@ package mglinnik
 
 import "testing"
 
-const failure = "Expected %d to equal %d, but got %d"
+const failureInteger = "Expected %d to equal %d, but got %d"
 
 // TestFactorial ...
 func TestFactorial(t *testing.T) {
@@ -11,7 +11,7 @@ func TestFactorial(t *testing.T) {
 
 	for i, x := range input {
 		if Factorial(x) != expected[i] {
-			t.Errorf(failure, input[i], expected[i], Factorial(x))
+			t.Errorf(failureInteger, input[i], expected[i], Factorial(x))
 
 		}
 
