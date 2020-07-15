@@ -75,7 +75,7 @@ func FoobarV2(val int) (result string) {
 // ### REVERS ####################################################################
 
 func Revers(s string) string {
-	sToRune = []rune(s)
+	sToRune := []rune(s)
 	ln := len(sToRune)
 	result := make([]rune, ln)
 	for i, val := range sToRune {
