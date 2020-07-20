@@ -28,7 +28,6 @@ func TestWWW(t *testing.T) {
 func testOrders(t *testing.T) {
 	for i := 1; i < 10; i++ {
 		val := fmt.Sprintf("http://localhost/?createorder=0&auto=%d", i)
-		fmt.Println(val)
 		err, _ := runCommand("curl", val)
 		isError(t, err)
 	}
@@ -36,6 +35,11 @@ func testOrders(t *testing.T) {
 	if len(orders.Table) <= 0 {
 		t.Errorf("Error Test Len Orders Table. Want > 0 and Got = '%v'", orders.Table)
 	}
+
+	val := fmt.Sprintf("http://localhost/?paidorder=%d&type=_", 5)
+	err, _ := runCommand("curl", val)
+	isError(t, err)
+
 }
 
 func runCommand(cmdName string, arg ...string) (error, string) {

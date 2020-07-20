@@ -72,12 +72,12 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 				logs.Logs(fmt.Sprintf("Get auto id: %d", autoId))
 				orders.SetOrder(autoId)
 			// Examples:
-			// CMD: curl "http://localhost/?paidorder=1"
-			// Browser: http://localhost/?paidorder=1
+			// CMD: curl "http://localhost/?paidorder=34type=_"
+			// Browser: http://localhost/?paidorder=881&type=erip
 			case "paidorder":
 				id := strToInt(vl)
 				o := orders.Table[id]
-				go o.Payment(htmlVrbls["type"])
+				_ = o.Payment(htmlVrbls["type"])
 			}
 		}
 	}

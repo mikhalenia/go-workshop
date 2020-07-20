@@ -21,6 +21,9 @@ type Order struct {
 	status bool
 }
 
+const ERIP = "erip"
+const VISA = "visa"
+
 type Stack struct {
 	sync.Mutex
 	Table map[int]Order
@@ -32,16 +35,17 @@ func CreateStack() Stack {
 	}
 }
 
-func (o Order) Payment(typePayment string) error {
+func (o Order) Payment(pType string) error {
 	var p IPaid
-	switch typePayment {
-	case "erip":
+	switch pType {
+	case ERIP:
 		p = IPaid(payment.CreateEripOrder(o.id))
-	case "visa":
+	case VISA:
 		p = IPaid(payment.CreateVisaOrder(o.id))
 	default: // Cash payment
 		p = IPaid(o)
 	}
+
 	return p.Paid()
 }
 
