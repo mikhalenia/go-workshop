@@ -24,13 +24,13 @@ type Order struct {
 const ERIP = "erip"
 const VISA = "visa"
 
-type Stack struct {
+type Catalog struct {
 	sync.Mutex
 	Table map[int]Order
 }
 
-func CreateStack() Stack {
-	return Stack{
+func CreateCatalog() Catalog {
+	return Catalog{
 		Table: make(map[int]Order),
 	}
 }
@@ -57,40 +57,40 @@ func (o Order) Paid() (err error) { // Cash payment
 	return
 }
 
-func (s *Stack) SetOrder(value ...interface{}) error { // got some value for create Order
-	order := Order{}
-	order.id = s.createId()
-	for i, val := range value {
-		switch i {
-		case 0:
-			order.user = val.(int)
-		case 1:
-			order.auto = val.(int)
-		case 2:
-			order.sum = val.(int)
-		}
-	}
+func (c *Catalog) SetOrder(order Order) error { // got some value for create Order
+	//	order := Order{}
+	//	order.id = c.createId()
+	//	for i, val := range value {
+	//		switch i {
+	//		case 0:
+	//			order.user = val.(int)
+	//		case 1:
+	//			order.auto = val.(int)
+	//		case 2:
+	//			order.sum = val.(int)
+	//		}
+	//	}
 	logs.Logs(fmt.Sprintf("Created order: %v", order))
-	s.Lock()
-	s.Table[order.id] = order
-	s.Unlock()
+	c.Lock()
+	c.Table[order.id] = order
+	c.Unlock()
 	return nil
 }
 
-func (s *Stack) GetOrder(id int) Order {
-	return s.Table[id]
+func (c *Catalog) GetOrder(id int) Order {
+	return c.Table[id]
 }
 
-func (s *Stack) DeleteOrder(id int) {
-	s.Lock()
-	delete(s.Table, id)
-	s.Unlock()
+func (c *Catalog) DeleteOrder(id int) {
+	c.Lock()
+	delete(c.Table, id)
+	c.Unlock()
 }
 
-func (s *Stack) createId() (id int) {
+func (c *Catalog) createId() (id int) {
 	i := 1
 	for {
-		if _, ok := s.Table[i]; !ok {
+		if _, ok := c.Table[i]; !ok {
 			id = i
 			logs.Logs(fmt.Sprintf("Created id: %d", id))
 			return

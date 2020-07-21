@@ -15,57 +15,57 @@ type Auto struct {
 	status bool
 }
 
-type List struct {
+type Catalog struct {
 	sync.Mutex
 	Table map[int]Auto
 }
 
-func CreateList() List {
-	return List{
+func CreateCatalog() Catalog {
+	return Catalog{
 		Table: make(map[int]Auto),
 	}
 }
 
-func (l *List) SetAuto(auto Auto) error { // got some value for create Auto
+func (c *Catalog) SetAuto(auto Auto) error { // got some value for create Auto
 	//	auto := Auto{}
-	//	auto.id = l.createId()
+	//	auto.id = c.createId()
 
 	//	for i, val := range value {
 	//		switch i {
 	//		case 0:
-	//			auto.mark = val.(string)
+	//			auto.mark = vac.(string)
 	//		case 1:
-	//			auto.model = val.(string)
+	//			auto.model = vac.(string)
 	//		case 2:
-	//			auto.url = val.(string)
+	//			auto.url = vac.(string)
 	//		case 3:
-	//			auto.count = val.(int)
+	//			auto.count = vac.(int)
 	//		}
 	//	}
-	logl.Logs(fmt.Sprintf("Created auto: %v", auto))
-	l.Lock()
-	l.Table[auto.id] = auto
-	l.Unlock()
+	logs.Logs(fmt.Sprintf("Created auto: %v", auto))
+	c.Lock()
+	c.Table[auto.id] = auto
+	c.Unlock()
 	return nil
 	return nil
 }
 
-func (l *List) GetAuto(id int) Auto {
-	return l.Table[id]
+func (c *Catalog) GetAuto(id int) Auto {
+	return c.Table[id]
 }
 
-func (l *List) DeleteAuto(id int) {
-	l.Lock()
-	delete(l.Table, id)
-	l.Unlock()
+func (c *Catalog) DeleteAuto(id int) {
+	c.Lock()
+	delete(c.Table, id)
+	c.Unlock()
 }
 
-func (l *List) createId() (id int) {
+func (c *Catalog) createId() (id int) {
 	i := 1
 	for {
-		if _, ok := l.Table[i]; !ok {
+		if _, ok := c.Table[i]; !ok {
 			id = i
-			logl.Logs(fmt.Sprintf("Created id: %d", id))
+			logs.Logs(fmt.Sprintf("Created id: %d", id))
 			return
 		}
 		i++

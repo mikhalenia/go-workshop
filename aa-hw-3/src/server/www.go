@@ -17,9 +17,9 @@ import (
 )
 
 var (
-	autos          auto.Stack
-	orders         order.Stack
-	users          user.Stack
+	autos          auto.Catalog
+	orders         order.Catalog
+	users          user.Catalog
 	PATH_SEPARATOR string
 	baseDir        string
 )
@@ -37,9 +37,9 @@ func InitServer() {
 		logs.Logs(err.Error())
 	}
 
-	autos = auto.CreateList()
-	orders = order.CreateList()
-	users = user.CreateList()
+	autos = auto.CreateCatalog()
+	orders = order.CreateCatalog()
+	users = user.CreateCatalog()
 }
 
 func StartWebServer() {
@@ -82,6 +82,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 			case "createorder":
 				autoId := strToInt(htmlVrbls["auto"])
 				logs.Logs(fmt.Sprintf("Get auto id: %d", autoId))
+				order := Order{orders.createId(), autoId}
 				orders.SetOrder(autoId)
 			// Examples:
 			// CMD: curl "http://localhost/?paidorder=34type=_"

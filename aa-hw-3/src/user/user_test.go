@@ -10,6 +10,7 @@ var users Catalog
 func TestUser(t *testing.T) {
 	var user User
 	users = CreateCatalog()
+
 	for i := 0; i < 10; i++ {
 
 		user = User{users.createId(), fmt.Sprintf("name %d", i), fmt.Sprintf("surname %d", i), fmt.Sprintf("login %d", i), fmt.Sprintf("password %d", i), fmt.Sprintf("email %d", i)}

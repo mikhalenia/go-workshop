@@ -4,19 +4,22 @@ import (
 	"testing"
 )
 
-var orders Stack
+var orders Catalog
 
 func TestOrder(t *testing.T) {
+	var order Order
+	orders = CreateCatalog()
 
-	orders = CreateStack()
 	for i := 0; i < 10; i++ {
-		orders.SetOrder(i, i, i)
+		order = Order{orders.createId(), i, i, i, false}
+		orders.SetOrder(order)
 	}
 
 	o := orders.GetOrder(5)
 	orders.DeleteOrder(o.id)
 
-	orders.SetOrder(100, 100, 100)
+	order = Order{orders.createId(), 100, 100, 100, false}
+	orders.SetOrder(order)
 
 	o = orders.GetOrder(5)
 
@@ -28,7 +31,8 @@ func TestOrder(t *testing.T) {
 		t.Errorf("Error Test Len Users. Want = 10 and Got = '%d'.", len(orders.Table))
 	}
 
-	orders.SetOrder(11, 11, 11)
+	order = Order{orders.createId(), 11, 11, 11, false}
+	orders.SetOrder(order)
 	o = orders.GetOrder(len(orders.Table))
 
 	if o.id != 11 {
