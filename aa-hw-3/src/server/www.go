@@ -21,9 +21,22 @@ var (
 	orders         order.Stack
 	users          user.Stack
 	PATH_SEPARATOR string
+	baseDir        string
 )
 
 func InitServer() {
+
+	if runtime.GOOS == "windows" {
+		PATH_SEPARATOR = "\\"
+	} else {
+		PATH_SEPARATOR = "/"
+	}
+
+	baseDir, err := getBaseDir()
+	if err != nil {
+		logs.Logs(err.Error())
+	}
+
 	autos = auto.CreateStack()
 	orders = order.CreateStack()
 	users = user.CreateStack()
@@ -48,7 +61,6 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 			file = "/index.html"
 			bytes, contentType := readFile(file)
 			w.Header().Set("Content-Type", contentType)
-			w.Header().Set("Server", "goserver/0.1")
 			w.Header().Set("Server", "goserver/0.1")
 			w.WriteHeader(200)
 			w.Write(bytes)
@@ -124,10 +136,7 @@ func intToStr(i int) string {
 }
 
 func readFile(file string) ([]uint8, string) { // readFile (file string) bytes []uint8, contentType string
-	baseDir, err := getBaseDir()
-	if err != nil {
-		logs.Logs(err.Error())
-	}
+
 	reqFile, err := os.Open(baseDir + file)
 	if err != nil {
 		reqFile, err = os.Open(baseDir + file + ".html")
@@ -151,12 +160,6 @@ func getBaseDir() (string, error) {
 
 func getRootDir() (string, error) {
 	var dir string
-
-	if runtime.GOOS == "windows" {
-		PATH_SEPARATOR = "\\"
-	} else {
-		PATH_SEPARATOR = "/"
-	}
 
 	tdir, err := os.Getwd()
 	if err != nil {
