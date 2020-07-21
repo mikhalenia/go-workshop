@@ -37,9 +37,9 @@ func InitServer() {
 		logs.Logs(err.Error())
 	}
 
-	autos = auto.CreateStack()
-	orders = order.CreateStack()
-	users = user.CreateStack()
+	autos = auto.CreateList()
+	orders = order.CreateList()
+	users = user.CreateList()
 }
 
 func StartWebServer() {

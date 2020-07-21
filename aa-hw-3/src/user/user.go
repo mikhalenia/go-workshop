@@ -15,53 +15,53 @@ type User struct {
 	email    string
 }
 
-type Stack struct {
+type Catalog struct {
 	sync.Mutex
 	Table map[int]User
 }
 
-func CreateStack() Stack {
-	return Stack{
+func CreateCatalog() Catalog {
+	return Catalog{
 		Table: make(map[int]User),
 	}
 }
 
-func (s *Stack) SetUser(value ...interface{}) error { // got some value for create Auto
-	user := User{}
-	user.id = s.createId()
-	for i, val := range value {
-		switch i {
-		case 0:
-			user.name = val.(string)
-		case 1:
-			user.surname = val.(string)
-		case 2:
-			user.login = val.(string)
-		case 3:
-			user.password = val.(string)
-		}
-	}
+func (c *Catalog) SetUser(user User) error { // got some value for create Auto
+	//	user := User{}
+	//	user.id = c.createId()
+	//	for i, val := range value {
+	//		switch i {
+	//		case 0:
+	//			user.name = vac.(string)
+	//		case 1:
+	//			user.surname = vac.(string)
+	//		case 2:
+	//			user.login = vac.(string)
+	//		case 3:
+	//			user.password = vac.(string)
+	//		}
+	//	}
 	logs.Logs(fmt.Sprintf("Created user: %v", user))
-	s.Lock()
-	s.Table[user.id] = user
-	s.Unlock()
+	c.Lock()
+	c.Table[user.id] = user
+	c.Unlock()
 	return nil
 }
 
-func (s *Stack) GetUser(id int) User {
-	return s.Table[id]
+func (c *Catalog) GetUser(id int) User {
+	return c.Table[id]
 }
 
-func (s *Stack) DeleteUser(id int) {
-	s.Lock()
-	delete(s.Table, id)
-	s.Unlock()
+func (c *Catalog) DeleteUser(id int) {
+	c.Lock()
+	delete(c.Table, id)
+	c.Unlock()
 }
 
-func (s *Stack) createId() (id int) {
+func (c *Catalog) createId() (id int) {
 	i := 1
 	for {
-		if _, ok := s.Table[i]; !ok {
+		if _, ok := c.Table[i]; !ok {
 			id = i
 			logs.Logs(fmt.Sprintf("Created id: %d", id))
 			return
