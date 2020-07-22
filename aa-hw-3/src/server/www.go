@@ -32,7 +32,8 @@ func InitServer() {
 		PATH_SEPARATOR = "/"
 	}
 
-	baseDir, err := getBaseDir()
+	var err error
+	baseDir, err = getBaseDir()
 	if err != nil {
 		logs.Logs(err.Error())
 	}
@@ -81,11 +82,13 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 			// Browser: http://localhost/?createorder=0&auto=23
 			case "createorder":
 				autoId := strToInt(htmlVrbls["auto"])
-				logs.Logs(fmt.Sprintf("Get auto id: %d", autoId))
-				order := Order{orders.createId(), autoId}
-				orders.SetOrder(autoId)
+				logs.Logs(fmt.Sprintf("Create order for auto id: %d", autoId))
+
+				// Id, userId, autoId, Sum, TimeFrom, TimeTo, Status
+				order := order.Order{orders.CreateId(), 1, autoId, 20, false}
+				orders.SetOrder(order)
 			// Examples:
-			// CMD: curl "http://localhost/?paidorder=34type=_"
+			// CMD: curl "http://localhost/?paidorder=34type=none"
 			// Browser: http://localhost/?paidorder=881&type=erip
 			case "paidorder":
 				id := strToInt(vl)

@@ -12,13 +12,13 @@ type IPaid interface {
 }
 
 type Order struct {
-	id   int
-	user int
-	auto int
-	sum  int
-	//from   Time
-	//to     Time
-	status bool
+	Id     int
+	UserId int
+	AutoId int
+	Sum    int
+	//From   Time
+	//To     Time
+	Status bool
 }
 
 const ERIP = "erip"
@@ -39,9 +39,9 @@ func (o Order) Payment(pType string) error {
 	var p IPaid
 	switch pType {
 	case ERIP:
-		p = IPaid(payment.CreateEripOrder(o.id))
+		p = IPaid(payment.CreateEripOrder(o.Id))
 	case VISA:
-		p = IPaid(payment.CreateVisaOrder(o.id))
+		p = IPaid(payment.CreateVisaOrder(o.Id))
 	default: // Cash payment
 		p = IPaid(o)
 	}
@@ -52,27 +52,15 @@ func (o Order) Payment(pType string) error {
 func (o Order) Paid() (err error) { // Cash payment
 	//
 	if err == nil {
-		logs.Logs(fmt.Sprintf("Order %d is paid", o.id))
+		logs.Logs(fmt.Sprintf("Order %d is paid", o.Id))
 	}
 	return
 }
 
 func (c *Catalog) SetOrder(order Order) error { // got some value for create Order
-	//	order := Order{}
-	//	order.id = c.createId()
-	//	for i, val := range value {
-	//		switch i {
-	//		case 0:
-	//			order.user = val.(int)
-	//		case 1:
-	//			order.auto = val.(int)
-	//		case 2:
-	//			order.sum = val.(int)
-	//		}
-	//	}
 	logs.Logs(fmt.Sprintf("Created order: %v", order))
 	c.Lock()
-	c.Table[order.id] = order
+	c.Table[order.Id] = order
 	c.Unlock()
 	return nil
 }
@@ -87,7 +75,7 @@ func (c *Catalog) DeleteOrder(id int) {
 	c.Unlock()
 }
 
-func (c *Catalog) createId() (id int) {
+func (c *Catalog) CreateId() (id int) {
 	i := 1
 	for {
 		if _, ok := c.Table[i]; !ok {
