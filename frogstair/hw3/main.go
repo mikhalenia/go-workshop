@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-workshop/frogstair/twitter/users"
+	"go-workshop/frogstair/hw3/users"
 )
 
 func main() {

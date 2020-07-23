@@ -1,8 +1,8 @@
 package users
 
 import (
-	"go-workshop/frogstair/twitter/posts"
-	"go-workshop/frogstair/twitter/util"
+	"go-workshop/frogstair/hw3/posts"
+	"go-workshop/frogstair/hw3/util"
 )
 
 // User struct represents a single user
