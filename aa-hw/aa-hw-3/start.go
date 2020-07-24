@@ -4,7 +4,7 @@ import (
 	"server"
 )
 
-func main() {
+func start() {
 	server.InitServer()
 	server.StartWebServer()
 }
