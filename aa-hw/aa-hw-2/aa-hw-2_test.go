@@ -55,7 +55,6 @@ func TestHourglassSum(t *testing.T) {
 		if tVal.want != result {
 			t.Errorf("Error Test hourglassSum. Iteration = %d, Want = %d and Got = '%v'.", i, tVal.want, result)
 		}
-
 	}
 }
 
