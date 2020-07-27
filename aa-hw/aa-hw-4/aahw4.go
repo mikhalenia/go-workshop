@@ -1,16 +1,11 @@
 package aahw4
 
-import (
-	"fmt"
-)
-
 type Tree struct {
 	root *Node
 }
 
 type Node struct {
 	data  int
-	value rune
 	left  *Node
 	right *Node
 }
@@ -113,28 +108,4 @@ func (root *Node) bst() bool {
 	} else {
 		return root.right.bst()
 	}
-}
-
-func parceTree(root *Node, array []int, i *int) rune {
-	var j = *i
-
-	if (root.left != nil) && (array[j] == '0') {
-		*i++
-		return parceTree(root.left, array, i)
-	}
-	if (root.right != nil) && (array[j] == '1') {
-		*i++
-		return parceTree(root.right, array, i)
-	}
-	return root.value
-}
-
-func (root *Node) huffman(array []int) string {
-	var i int = 0
-
-	var result []rune
-	for i < len(array) {
-		result = append(result, parceTree(root, array, &i))
-	}
-	return fmt.Sprint(result)
 }
