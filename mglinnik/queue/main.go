@@ -47,6 +47,7 @@ func main() {
 	quitWorker := make(chan bool)
 	quitBroker := make(chan bool)
 	for i := 0; i < 100; i++ {
+		go Worker(i, messages, quitWorker)
 	}
 	go Broker(messages, quitBroker)
 	time.Sleep(time.Second * 10)
