@@ -21,7 +21,6 @@ var (
 	orders         order.Catalog
 	users          user.Catalog
 	PATH_SEPARATOR string
-	baseDir        string
 )
 
 func InitServer() {
@@ -33,7 +32,7 @@ func InitServer() {
 	}
 
 	var err error
-	baseDir, err = getBaseDir()
+	BaseDir, err = getBaseDir()
 	if err != nil {
 		logs.Logs(err.Error())
 	}
@@ -41,6 +40,11 @@ func InitServer() {
 	autos = auto.CreateCatalog()
 	orders = order.CreateCatalog()
 	users = user.CreateCatalog()
+
+	err = autos.LoadAuto(BaseDir + "/autos.json")
+	if err != nil {
+		logs.Logs(err.Error())
+	}
 }
 
 func StartWebServer() {
@@ -85,8 +89,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 				logs.Logs(fmt.Sprintf("Create order for auto id: %d", autoId))
 
 				// Id, userId, autoId, Sum, TimeFrom, TimeTo, Status
-				order := order.Order{orders.CreateId(), 1, autoId, 20, false}
-				orders.SetOrder(order)
+				order := order.Order{orders.CreateId(), 1, autoId, 20, "created"}
+				orders.AddOrder(order)
 			// Examples:
 			// CMD: curl "http://localhost/?paidorder=34type=none"
 			// Browser: http://localhost/?paidorder=881&type=erip
@@ -141,12 +145,12 @@ func intToStr(i int) string {
 
 func readFile(file string) ([]uint8, string) { // readFile (file string) bytes []uint8, contentType string
 
-	reqFile, err := os.Open(baseDir + file)
+	reqFile, err := os.Open(BaseDir + file)
 	if err != nil {
-		reqFile, err = os.Open(baseDir + file + ".html")
+		reqFile, err = os.Open(BaseDir + file + ".html")
 		if err != nil {
 			file = PATH_SEPARATOR + "404.html"
-			reqFile, err = os.Open(baseDir + file)
+			reqFile, err = os.Open(BaseDir + file)
 		}
 	}
 	fi, err := reqFile.Stat()
@@ -156,13 +160,13 @@ func readFile(file string) ([]uint8, string) { // readFile (file string) bytes [
 	return bytes, contentType
 }
 
-func getBaseDir() (string, error) {
-	str, err := getRootDir()
+func BaseDir() (string, error) {
+	str, err := RootDir()
 	str = str + PATH_SEPARATOR + "www"
 	return str, err
 }
 
-func getRootDir() (string, error) {
+func RootDir() (string, error) {
 	var dir string
 
 	tdir, err := os.Getwd()

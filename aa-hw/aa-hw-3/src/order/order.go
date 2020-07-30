@@ -1,11 +1,31 @@
 package order
 
 import (
+	//"auto"
 	"fmt"
 	"logs"
 	"payment"
 	"sync"
+	//"user"
 )
+
+type LockAuto interface {
+	Lock() bool
+	Unlock()
+}
+
+/*func (c *Auto) Lock() bool {
+	//
+}
+
+func (c *Auto) Unlock() {
+
+}*/
+
+/*type OrderDB interface {
+	CreateOrder(User, Auto) Order
+	AddOrder(Order)
+}*/
 
 type IPaid interface {
 	Paid() error
@@ -16,9 +36,7 @@ type Order struct {
 	UserId int
 	AutoId int
 	Sum    int
-	//From   Time
-	//To     Time
-	Status bool
+	Status string
 }
 
 const ERIP = "erip"
@@ -35,7 +53,7 @@ func CreateCatalog() Catalog {
 	}
 }
 
-func (o Order) Payment(pType string) error {
+func (o *Order) Payment(pType string) error {
 	var p IPaid
 	switch pType {
 	case ERIP:
@@ -49,7 +67,7 @@ func (o Order) Payment(pType string) error {
 	return p.Paid()
 }
 
-func (o Order) Paid() (err error) { // Cash payment
+func (o *Order) Paid() (err error) { // Cash payment
 	//
 	if err == nil {
 		logs.Logs(fmt.Sprintf("Order %d is paid", o.Id))
@@ -57,7 +75,7 @@ func (o Order) Paid() (err error) { // Cash payment
 	return
 }
 
-func (c *Catalog) SetOrder(order Order) error { // got some value for create Order
+func (c *Catalog) AddOrder(order Order) error { // got some value for create Order
 	logs.Logs(fmt.Sprintf("Created order: %v", order))
 	c.Lock()
 	c.Table[order.Id] = order
@@ -65,15 +83,10 @@ func (c *Catalog) SetOrder(order Order) error { // got some value for create Ord
 	return nil
 }
 
-func (c *Catalog) GetOrder(id int) Order {
-	return c.Table[id]
-}
-
-func (c *Catalog) DeleteOrder(id int) {
-	c.Lock()
-	delete(c.Table, id)
-	c.Unlock()
-}
+/*func (c *Catalog) CreateOrder(user User, auto Auto) Order {
+	//
+	return nil
+}*/
 
 func (c *Catalog) CreateId() (id int) {
 	i := 1

@@ -1,18 +1,28 @@
 package user
 
 import (
+	"errors"
 	"fmt"
 	"logs"
 	"sync"
 )
 
+type UserDB interface {
+	Login(string, string) User
+	Logout(int) bool
+	DeleteUser(int)
+	AddUser(User) error
+}
+
 type User struct {
-	id       int
-	name     string
-	surname  string
-	login    string
-	password string
-	email    string
+	Id       int
+	Name     string
+	Surname  string
+	Login    string
+	Password string
+	Email    string
+	IP       string
+	Status   string
 }
 
 type Catalog struct {
@@ -26,30 +36,25 @@ func CreateCatalog() Catalog {
 	}
 }
 
-func (c *Catalog) SetUser(user User) error { // got some value for create Auto
-	//	user := User{}
-	//	user.id = c.createId()
-	//	for i, val := range value {
-	//		switch i {
-	//		case 0:
-	//			user.name = vac.(string)
-	//		case 1:
-	//			user.surname = vac.(string)
-	//		case 2:
-	//			user.login = vac.(string)
-	//		case 3:
-	//			user.password = vac.(string)
-	//		}
-	//	}
+func (c *Catalog) AddUser(user User) error { // got some value for create Auto
 	logs.Logs(fmt.Sprintf("Created user: %v", user))
 	c.Lock()
-	c.Table[user.id] = user
+	c.Table[user.Id] = user
 	c.Unlock()
 	return nil
 }
 
-func (c *Catalog) GetUser(id int) User {
-	return c.Table[id]
+func (c *Catalog) Login(login string, password string) (*User, error) {
+	//
+	return nil, errors.New("Login failed")
+}
+
+func (c *Catalog) Logout(id int) bool {
+	c.Lock()
+	u := c.Table[id]
+	u.Status = "offline"
+	c.Unlock()
+	return true
 }
 
 func (c *Catalog) DeleteUser(id int) {
