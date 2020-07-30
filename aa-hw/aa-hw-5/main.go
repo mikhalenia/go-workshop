@@ -1,42 +1,45 @@
 package main
 
 import (
-	"./queue"
-	"./job"
 	"fmt"
 	"time"
+
+	"job"
+	"queue"
 )
 
-func Worker(id int, i queue.IQueue, quit chan bool) {
+func Worker(id int, q *queue.Queue, quit chan bool) {
 	for {
 		select {
-		case <- quit:
+		case <-quit:
 			return
 		default:
-			if x, err := i.Pop(); err == nil {
-				fmt.Printf("Worked id #%d, receiving %v\n", id, x)
+			if x, err := q.Pop(); err == nil {
+				fmt.Printf("Worker #%d do %s work\n", id, x.Working())
 			} else {
-				fmt.Printf("Worker id #%d, Error: %s, need to wait\n", id, err.Error())
+				fmt.Printf("Worker #%d, waiting work: %s\n", id, err.Error())
 				time.Sleep(time.Second)
 			}
 		}
 	}
 }
 
-func Broker(i queue.IQueue, quit chan bool) {
+func Broker(q *queue.Queue, quit chan bool) {
 	x := 0
+	var j job.IJob
 	for {
 		select {
-		case <- quit:
+		case <-quit:
 			return
 		default:
-			//switch i.(type) {
-			switch i {
-			case iMessages:
-				i.Push(x)
-			case iNewJob:
-				i.Push(fmt.Sprintf("Broker %d",x))
+			if x%2 > 0 {
+				j = job.DecJob{x}
+				q.Push(j)
+			} else {
+				j = job.StrJob{fmt.Sprintf("string %d", x)}
+				q.Push(j)
 			}
+			fmt.Printf("Pushed Job: %v\n", j)
 			x++
 			if x > 100 {
 				time.Sleep(time.Second)
@@ -46,39 +49,26 @@ func Broker(i queue.IQueue, quit chan bool) {
 	}
 }
 
-var (
-	iMessages queue.IQueue
-	iNewJob   queue.IQueue
-)
-
 func main() {
 
 	messages := new(queue.Queue)
-	newJobs := new(job.NewQueue)
-
-	iMessages = queue.IQueue(messages)
-	iNewJob = queue.IQueue(newJobs)
 
 	quitWorker := make(chan bool)
 	quitBroker := make(chan bool)
 
 	for i := 0; i < 100; i++ {
-		if i%2>0 {
-			go Worker(i, iMessages, quitWorker)
-		} else {
-			go Worker(i, iNewJob, quitWorker)
-		}
+		go Worker(i, messages, quitWorker)
 	}
 
-	go Broker(iMessages, quitBroker)
-	go Broker(iNewJob, quitBroker)
+	go Broker(messages, quitBroker)
 
 	time.Sleep(time.Second * 10)
 
 	// kill Broker
 	close(quitBroker)
 
-	for len(messages.Content) > 0 {}
+	for len(messages.Content) > 0 {
+	}
 
 	// kill workers
 	close(quitWorker)
