@@ -1,10 +1,9 @@
 package main
 
 import (
-	"server"
+	cmd "github.com/Averianov/autocatalog/cmd"
 )
 
 func main() {
-	server.InitServer()
-	server.StartWebServer()
+	cmd.Main()
 }
