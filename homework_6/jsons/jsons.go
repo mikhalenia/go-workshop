@@ -15,19 +15,19 @@ type Car struct { // Struct from homework_3
 	IsAvailable bool `json:"available"`
 }
 
-func toJson(data []Car) string {
-	result, err := json.MarshalIndent(data, "", "")
+func toJson(data Car) string {
+	result, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
 	}
 	return string(result)
 }
-func fromJson(lineToUnmarshal string) (cars []Car){
-	err := json.Unmarshal([]byte(lineToUnmarshal), &cars)
+func fromJson(lineToUnmarshal string) (car Car){
+	err := json.Unmarshal([]byte(lineToUnmarshal), &car)
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
 	}
-	return cars
+	return car
 }
