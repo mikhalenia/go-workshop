@@ -1,0 +1,12 @@
+{
+  "version": "9",
+  "hosts": {
+    "local": {
+      "url": "http://docker.for.mac.localhost:8080",
+      "accessKey": "workshop",
+      "secretKey": "workshop",
+      "api": "S3v4",
+      "lookup": "path"
+    }
+  }
+}

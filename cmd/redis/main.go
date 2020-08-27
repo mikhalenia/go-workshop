@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/redis.v3"
 	"log"
 	"net/http"
-	"gopkg.in/redis.v3"
 )
 
 func main() {

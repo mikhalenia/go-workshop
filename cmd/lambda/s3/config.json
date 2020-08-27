@@ -1,0 +1,11 @@
+{
+  "version": "23",
+  "notify": {
+    "webhook": {
+      "workshop": {
+        "enable": true,
+        "endpoint": "http://docker.for.mac.localhost:8081"
+      }
+    }
+  }
+}

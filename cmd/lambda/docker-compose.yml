@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  workshop-minio:
+    build:
+      context: ./s3
+    container_name: minio_development
+    ports: ["8080:8080"]
+    environment:
+      - MINIO_ACCESS_KEY=workshop
+      - MINIO_SECRET_KEY=workshop
+
+  workshop-events:
+    build:
+      context: ./s3-events
+    container_name: minio_events
+    depends_on:
+      - workshop-minio
+
+  workshop-hook:
+    build:
+      context: ./hook
+    container_name: workshop_lambda
+    ports: ["8081:8080"]
+    depends_on:
+      - workshop-events
