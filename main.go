@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
 func main() {
-	fmt.Println("Hello world")
+	someKey := os.Getenv("TEST_ENV_KEY")
+	fmt.Printf("Some key : %v\n", someKey)
 }
