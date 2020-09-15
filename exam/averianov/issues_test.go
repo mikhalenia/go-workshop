@@ -23,3 +23,30 @@ func TestLeastInArray(t *testing.T) {
 	}
 
 }
+
+func TestIterateRuns(t *testing.T) {
+
+	type ChecketValues struct {
+		str      string
+		value    []rune
+		expected map[rune]int
+	}
+
+	var checkArr []ChecketValues
+
+	checkArr = append(checkArr, ChecketValues{"AndOdddPoSd", []rune{'A', 'd'}, map[rune]int{'A': 1, 'd': 5}})
+
+	for _, tested := range checkArr {
+		result := iterateRuns(tested.str, tested.value)
+
+		for key, value := range result {
+			expectedValue := tested.expected[key]
+			if expectedValue != value {
+				t.Errorf("Error iterateRuns key: %#U, value: %d, expected: %d", key, value, expectedValue)
+			} else {
+				t.Logf("%#U: %d", key, value)
+			}
+		}
+	}
+
+}

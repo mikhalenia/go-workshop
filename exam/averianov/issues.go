@@ -14,6 +14,20 @@ A: 1
 d: 5
  */
 
+func iterateRuns(str string, runes []rune) map[rune]int {
+	result := map[rune]int{}
+
+	for _, r := range runes {
+		for _, s := range str {
+			if s == r {
+				result[r]++
+			}
+		}
+	}
+
+	return result
+}
+
 func leastInArray(arr []int) (result int) {
 
 	result = -1
